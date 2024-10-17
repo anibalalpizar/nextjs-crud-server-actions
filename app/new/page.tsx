@@ -1,4 +1,3 @@
-import React from "react";
 import { CardWithForm } from "./task-form";
 
 function NewPage() {
