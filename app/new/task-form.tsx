@@ -19,22 +19,48 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
 export function CardWithForm() {
+  const createTask = async (formData: FormData) => {
+    "use server";
+
+    const name = formData.get("name");
+    const description = formData.get("description");
+    const priority = formData.get("priority");
+
+    console.log({ name, description, priority });
+
+    if (!name || !description || !priority) return;
+
+    const newTask = await prisma.task.create({
+      data: {
+        name: name as string,
+        description: description as string,
+        priority: priority as string,
+      },
+    });
+
+    console.log({ newTask });
+
+    redirect("/");
+  };
+
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Create task</CardTitle>
-        <CardDescription>
-          Fill in the form below to create a new task.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form>
+    <form action={createTask}>
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Create task</CardTitle>
+          <CardDescription>
+            Fill in the form below to create a new task.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Name of your task" />
+              <Input name="name" id="name" placeholder="Name of your task" />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="description">Description</Label>
@@ -45,9 +71,9 @@ export function CardWithForm() {
               />
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Priority</Label>
-              <Select>
-                <SelectTrigger id="framework">
+              <Label htmlFor="priority">Priority</Label>
+              <Select name="priority">
+                <SelectTrigger id="priority">
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
@@ -59,12 +85,12 @@ export function CardWithForm() {
               </Select>
             </div>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
-      </CardFooter>
-    </Card>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline">Cancel</Button>
+          <Button>Create</Button>
+        </CardFooter>
+      </Card>
+    </form>
   );
 }
