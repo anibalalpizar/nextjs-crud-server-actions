@@ -35,3 +35,25 @@ export const deleteTask = async (formData: FormData) => {
 
   revalidatePath("/");
 };
+
+export const updateTask = async (formData: FormData) => {
+  const id = formData.get("id");
+  const name = formData.get("name");
+  const description = formData.get("description");
+  const priority = formData.get("priority");
+
+  if (!id || !name || !description || !priority) return;
+
+  await prisma.task.update({
+    where: {
+      id: parseInt(id as string),
+    },
+    data: {
+      name: name as string,
+      description: description as string,
+      priority: priority as string,
+    },
+  });
+
+  redirect("/");
+};
