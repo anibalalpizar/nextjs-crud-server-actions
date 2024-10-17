@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,34 +17,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import prisma from "@/lib/prisma";
-import { redirect } from "next/navigation";
+import { createTask } from "@/actions/tasks-actions";
 
 export function CardWithForm() {
-  const createTask = async (formData: FormData) => {
-    "use server";
-
-    const name = formData.get("name");
-    const description = formData.get("description");
-    const priority = formData.get("priority");
-
-    console.log({ name, description, priority });
-
-    if (!name || !description || !priority) return;
-
-    const newTask = await prisma.task.create({
-      data: {
-        name: name as string,
-        description: description as string,
-        priority: priority as string,
-      },
-    });
-
-    console.log({ newTask });
-
-    redirect("/");
-  };
-
   return (
     <form action={createTask}>
       <Card className="w-[350px]">
