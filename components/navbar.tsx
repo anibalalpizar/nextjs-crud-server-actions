@@ -5,8 +5,8 @@ import { buttonVariants } from "./ui/button";
 
 function Navbar() {
   return (
-    <nav className="flex justify-between">
-      <h1>Next Actions Crud</h1>
+    <nav className="flex justify-between py-10">
+      <h1 className="text-3xl font-bold">Next Actions Crud</h1>
 
       <div className="flex gap-x-2 items-center">
         <Link className={buttonVariants({ variant: "secondary" })} href="new">
